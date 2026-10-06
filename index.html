@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conecta Comunidade - Inclusão Digital</title>
+  
+  <!-- 🌐 Ícone da Aba do Navegador (Favicon) -->
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <link rel="apple-touch-icon" href="logo.jpg">
+
+  <style>
+    /* Variáveis para Tema Claro (Padrão) */
+    :root {
+      --bg-primary: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --card-sub-bg: #F1F5F9;
+      --text-main: #0F172A;
+      --text-muted: #475569;
+      --brand-blue: #1D4ED8;
+      --brand-green: #059669;
+      --border-color: #E2E8F0;
+      --header-bg: #FFFFFF;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 12px 20px -3px rgba(29, 78, 216, 0.15);
+    }
+
+    /* Variáveis para Tema Escuro (Dark Mode) */
+    [data-theme="dark"] {
+      --bg-primary: #0F172A;
+      --card-bg: #1E293B;
+      --card-sub-bg: #334155;
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --brand-blue: #3B82F6;
+      --brand-green: #10B981;
+      --border-color: #334155;
+      --header-bg: #1E293B;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      --shadow-hover: 0 12px 20px -3px rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 60px;
+      overflow-x: hidden;
+    }
+
+    /* Desativa Scroll enquanto a Splash Screen está ativa */
+    body.splash-active {
+      overflow: hidden;
+    }
+
+    /* 🚀 SPLASH SCREEN (Animação Inicial de Entrada) */
+    #splashScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+    }
+
+    .splash-content {
+      text-align: center;
+      animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .splash-logo {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      border-radius: 50%;
+      box-shadow: 0 10px 25px rgba(29, 78, 216, 0.25);
+      margin-bottom: 1.25rem;
+    }
+
+    .splash-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+      margin-bottom: 0.4rem;
+    }
+
+    .splash-subtitle {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--brand-blue);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    #splashScreen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Header Responsivo */
+    header {
+      background-color: var(--header-bg);
+      border-bottom: 2px solid var(--border-color);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-container img {
+      height: 75px;
+      width: auto;
+      object-fit: contain;
+      border-radius: 50%;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .logo-container img:hover {
+      transform: scale(1.08) rotate(3deg);
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-text .title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .logo-text .subtitle {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--brand-blue);
+      letter-spacing: 0.5px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-theme {
+      background-color: var(--card-sub-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-theme:hover {
+      border-color: var(--brand-blue);
+      transform: scale(1.05);
+    }
+
+    .accessibility-badge {
+      background-color: #EFF6FF;
+      color: #1D4ED8;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid #BFDBFE;
+      animation: pulseSoft 3s infinite ease-in-out;
+    }
+
+    [data-theme="dark"] .accessibility-badge {
+      background-color: #1E3A8A;
+      color: #93C5FD;
+      border-color: #1D4ED8;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin: 2.5rem 0 2rem 0;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero h1 {
+      font-size: 2.1rem;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    .about-section {
+      background-color: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .about-title {
+      font-size: 1.4rem;
+      color: var(--brand-blue);
+      margin-bottom: 1.25rem;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .about-card {
+      background: var(--card-sub-bg);
+      border-left: 4px solid var(--brand-blue);
+      padding: 1.25rem;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .about-card:hover {
+      transform: translateX(5px);
+    }
+
+    .about-card.ods {
+      border-left-color: #E11D48;
+    }
+
+    .about-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .about-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.75rem;
+      color: var(--text-main);
+    }
+
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .topic-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .reveal.active .topic-card {
+      animation: cardFadeIn 0.55s ease-out both;
+    }
+
+    .reveal.active .topic-card:nth-child(2) { animation-delay: 80ms; }
+    .reveal.active .topic-card:nth-child(3) { animation-delay: 160ms; }
+    .reveal.active .topic-card:nth-child(4) { animation-delay: 240ms; }
+    .reveal.active .topic-card:nth-child(5) { animation-delay: 320ms; }
+
+    .topic-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--brand-blue);
+    }
+
+    .topic-icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.75rem;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .topic-card:hover .topic-icon {
+      transform: scale(1.15) rotate(-5deg);
+    }
+
+    .topic-title {
+      font-size: 1.25rem;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .topic-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
+    }
+
+    .btn-expand {
+      background-color: var(--brand-blue);
+      color: #FFFFFF;
+      border: none;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .btn-expand:hover {
+      transform: scale(1.02);
+      opacity: 0.95;
+    }
+
+    .feedback-section {
+      background-color: var(--card-bg);
+      border: 2px dashed var(--brand-blue);
+      border-radius: 16px;
+      padding: 2.25rem;
+      margin-top: 3.5rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .feedback-section h2 {
+      font-size: 1.6rem;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .feedback-section p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 650px;
+      margin: 0 auto 1.5rem auto;
+    }
+
+    .project-credits {
+      margin-top: 3.5rem;
+      padding: 2rem 1rem;
+      background-color: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .credits-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .credits-content h2 {
+      margin: 0 0 1rem;
+      color: var(--text-main);
+      font-size: 1.15rem;
+      text-align: center;
+    }
+
+    .credits-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.5rem 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0;
+      color: var(--text-muted);
+      list-style: none;
+      text-align: center;
+    }
+
+    .btn-forms {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background-color: var(--brand-green);
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+      animation: pulseGlow 2.5s infinite;
+    }
+
+    .btn-forms:hover {
+      transform: translateY(-3px) scale(1.02);
+      background-color: #047857;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(5px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 850px;
+      max-height: 90vh;
+      border-radius: 16px;
+      overflow-y: auto;
+      padding: 1.75rem;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      animation: scaleUp 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--card-sub-bg);
+      border: none;
+      font-size: 1.25rem;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .modal-close:hover {
+      transform: rotate(90deg);
+    }
+
+    .video-section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--brand-blue);
+      margin: 1.25rem 0 0.75rem 0;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .youtube-video-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1rem 0 0.5rem;
+    }
+
+    .text-tips {
+      padding: 1rem;
+      border-left: 4px solid var(--brand-blue);
+      border-radius: 8px;
+      background: var(--card-sub-bg);
+      color: var(--text-main);
+    }
+
+    .text-tip-group + .text-tip-group {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .text-tip-group h4 {
+      margin-bottom: 0.35rem;
+      color: var(--brand-blue);
+    }
+
+    .text-tip-group ul {
+      padding-left: 1.25rem;
+    }
+
+    .text-tip-group li + li {
+      margin-top: 0.25rem;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      margin-bottom: 1.25rem;
+      background-color: #000;
+    }
+
+    .video-wrapper iframe, .video-wrapper video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .document-wrapper {
+      height: 60vh;
+      min-height: 320px;
+      max-height: 520px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+    }
+
+    .document-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .document-link {
+      display: inline-block;
+      margin-bottom: 1.25rem;
+      color: var(--brand-blue);
+      font-weight: 700;
+    }
+
+    /* Keyframes */
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.6); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes cardFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleUp {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes pulseSoft {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.75; }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); }
+      50% { box-shadow: 0 4px 20px rgba(5, 150, 105, 0.5); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        justify-content: center;
+        text-align: center;
+      }
+      .logo-container {
+        flex-direction: column;
+      }
+      .logo-container img {
+        height: 65px;
+      }
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .modal-content {
+        padding: 1.25rem;
+      }
+      .btn-forms {
+        width: 100%;
+        padding: 0.9rem 1rem;
+      }
+      .splash-logo {
+        width: 110px;
+        height: 110px;
+      }
+      .splash-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body class="splash-active">
+
+  <!-- 🚀 Tela de Boas-Vindas (Splash Screen) -->
+  <div id="splashScreen">
+    <div class="splash-content">
+      <img src="logo.jpg" alt="Logo Conecta Comunidade" class="splash-logo">
+      <div class="splash-title">Conecta Comunidade</div>
+      <div class="splash-subtitle">Inclusão & Letramento Digital</div>
+    </div>
+  </div>
+
+  <!-- Cabeçalho Acessível -->
+  <header>
+    <div class="logo-container">
+      <img src="logo.jpg" alt="Logo Conecta Comunidade">
+      <div class="logo-text">
+        <span class="title">Conecta Comunidade</span>
+        <span class="subtitle">INCLUSÃO & LETRAMENTO DIGITAL</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-theme" onclick="toggleTheme()" id="themeBtn">🌙 Escuro</button>
+      <div class="accessibility-badge">
+        ♿ UniBTA
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <section class="hero">
+      <h1>Inclusão e Letramento Digital na Comunidade</h1>
+      <p>Uma iniciativa acadêmica criada para implementar autodesenvolvimento e inclusão de tecnologia na comunidade, para capacitar e proteger cidadãos no uso das tecnologias do dia a dia.</p>
+    </section>
+
+    <section class="about-section reveal">
+      <h2 class="about-title">📌 Sobre o Projeto Conecta Comunidade</h2>
+      
+      <div class="about-grid">
+        <div class="about-card">
+          <h3>📊 Construído com a Comunidade</h3>
+          <p>Este portal não foi feito ao acaso: aplicamos um questionário prévio com moradores e ouvimos mais de 50 pessoas para identificar as principais dificuldades no mundo digital. Os tópicos abaixo refletem diretamente as prioridades apontadas por vocês.</p>
+        </div>
+
+        <div class="about-card ods">
+          <h3>🎯 ODS 10: Redução das Desigualdades</h3>
+          <p>Como Projeto de Extensão Universitária do <strong>Centro Universitário UniBTA</strong>, este portal é voltado ao <strong>Objetivo de Desenvolvimento Sustentável (ODS) 10 da ONU</strong>, promovendo a inclusão social e prevenindo a exclusão digital.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="section-header">
+        <h2>Módulos Práticos & Tutoriais</h2>
+        <p style="color: var(--text-muted);">Clique no botão para abrir os vídeos explicativos e orientações de cada tema.</p>
+      </div>
+
+      <div class="topics-grid">
+
+        <article class="topic-card">
+          <div>
+            <div class="topic-icon">🛡️️</div>
+            <h2 class="topic-title">1. Segurança e Prevenção de Golpes</h2>
+            <p class="topic-desc">Aprenda a identificar mensagens falsas, links suspeitos e proteger suas contas no WhatsApp e e-mail.</p>
+          </div>
+          <button class="btn-expand" onclick="openTopic('seguranca')">Maximizar Tutoriais 🔍</button>
+        </article>
+
+        <article class="topic-card">
+          <div>
+            <div class="topic-icon">📱</div>
+            <h2 class="topic-title">2. Configurações do Celular</h2>
+            <p class="topic-desc">Aprenda a ajustar configurações, organizar aplicativos, liberar espaço e facilitar o uso do aparelho.</p>
+          </div>
+          <button class="btn-expand" onclick="openTopic('celular')">Maximizar Tutoriais 🔍</button>
+        </article>
+
+        <article class="topic-card">
+          <div>
+            <div class="topic-icon">🏛️</div>
+            <h2 class="topic-title">3. Serviços Públicos e Gov.br</h2>
+            <p class="topic-desc">Guia para acessar sua conta Gov.br, consultar a Carteira de Trabalho Digital e serviços do Meu INSS.</p>
+          </div>
+          <button class="btn-expand" onclick="openTopic('govbr')">Maximizar Tutoriais 🔍</button>
+        </article>
+
+        <article class="topic-card">
+          <div>
+            <div class="topic-icon">💳</div>
+            <h2 class="topic-title">4. Compras e Pagamentos Online</h2>
+            <p class="topic-desc">Como fazer pagamentos por Pix de forma segura, utilizar cartão virtual e verificar a reputação de sites.</p>
+          </div>
+          <button class="btn-expand" onclick="openTopic('pagamentos')">Maximizar Tutoriais 🔍</button>
+        </article>
+
+        <article class="topic-card">
+          <div>
+            <div class="topic-icon">💬</div>
+            <h2 class="topic-title">5. WhatsApp e Redes Sociais</h2>
+            <p class="topic-desc">Aprenda a configurar a privacidade das suas conversas e utilizar redes sociais mantendo sua segurança física e digital.</p>
+          </div>
+          <button class="btn-expand" onclick="openTopic('redes')">Maximizar Tutoriais 🔍</button>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="feedback-section reveal">
+      <h2>📝 Quer Recomendar Novos Conteúdos ou Responder Nossas Perguntas?</h2>
+      <p>Sua opinião é fundamental para continuarmos melhorando o portal! Clique no botão abaixo para responder à nossa pesquisa rápida ou sugerir novos tutoriais.</p>
+      
+      <a href="https://docs.google.com/forms/d/17e-RG_vuCtL_tw2VhzRMN3d_rVOghI98RtcBRexJTVo/edit?hl=pt-br&pli=1" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="btn-forms">
+        📋 Responder Formulário de Pesquisa
+      </a>
+    </section>
+
+  </main>
+
+  <footer class="project-credits">
+    <div class="credits-content">
+      <h2>Créditos do Projeto</h2>
+      <ul class="credits-list">
+        <li>Vitor Rodrigues</li>
+        <li>Diego Naville</li>
+        <li>David Andrade</li>
+        <li>Janaise Santos</li>
+        <li>Sabrina Felix</li>
+        <li>Samuel Cordeiro</li>
+      </ul>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeTopic()" aria-label="Fechar">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    // Temporizador da Splash Screen de Entrada
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        const splash = document.getElementById("splashScreen");
+        splash.classList.add("fade-out");
+        document.body.classList.remove("splash-active");
+        revealOnScroll(); // Dispara revelação do scroll
+      }, 2000); // 2.0 segundos de exibição da animação inicial
+    });
+
+    // Alternância de Tema
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute("data-theme");
+      const btn = document.getElementById("themeBtn");
+
+      if (currentTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", "light");
+        btn.innerHTML = "🌙 Escuro";
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+        btn.innerHTML = "☀️ Claro";
+      }
+    }
+
+    // Scroll Reveal
+    function revealOnScroll() {
+      const reveals = document.querySelectorAll(".reveal");
+      const windowHeight = window.innerHeight;
+
+      reveals.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        if (elementTop < windowHeight - 80) {
+          element.classList.add("active");
+        }
+      });
+    }
+
+    window.addEventListener("scroll", revealOnScroll);
+
+    // Dados dos Tutoriais
+    const topicsData = {
+      seguranca: {
+        title: "🛡️ Segurança e Prevenção de Golpes",
+        document: "Seguranca_digital/Guia_Seguranca_Digital_Anti_Golpes.pdf",
+        documentTitle: "Guia de Segurança Digital",
+        youtubeVideos: [
+          { id: "u_u5munbhvU", title: "Tutorial de Segurança digital", credit: "Feito por Diego Naville" },
+          { id: "t91q-DMYJ_w", title: "Como Hacker protege sua própria senha? Gabriel Pato dá solução definitiva" },
+          { id: "s7ldn31OEFc", title: "Sua Segurança é uma DROGA | Gerenciadores de Senhas, 2FA, Encriptação" }
+        ],
+        textSections: [
+          {
+            title: "Proteja suas contas e dados",
+            tips: [
+              "Não compartilhe senhas nem códigos de confirmação, mesmo com quem diz ser do banco ou do suporte.",
+              "Confira o endereço do site e o remetente antes de abrir links; prefira acessar serviços pelo endereço oficial.",
+              "Ative a verificação em duas etapas e use senhas diferentes nas contas importantes.",
+              "Se receber um pedido urgente de dinheiro, confirme por outro canal conhecido."
+            ]
+          }
+        ]
+      },
+      celular: {
+        title: "📱 Configurações do Celular",
+        document: "Utilizacao_celular/Guia_configuracoes.pdf",
+        documentTitle: "Guia de Configurações do Celular",
+        youtubeVideos: [
+          { id: "nbRGk4m-0L0", title: "Tutorial Sobre Configurações Gerais do celular e Acessibilidade", credit: "Feito por Samuel Cordeiro" },
+          { id: "uanfwbUxGjw", title: "QUAIS SÃO AS CONFIGURAÇÕES MAIS IMPORTANTES DO CELULAR" },
+          { id: "6sGTIV4pd7c", title: "Como USAR O CARTÃO SD como MEMÓRIA INTERNA do SMARTPHONE!" },
+          { id: "UGlcFlCyzHQ", title: "COMO CONECTAR MEU CELULAR A UMA REDE WIFI" }
+        ],
+        textSections: [
+          {
+            title: "Ajustes úteis no celular",
+            tips: [
+              "Revise as permissões de câmera, microfone e localização e mantenha apenas as necessárias para cada aplicativo.",
+              "Instale atualizações do sistema e dos aplicativos pela loja oficial do aparelho.",
+              "Use PIN, senha ou biometria no bloqueio de tela e configure o bloqueio automático.",
+              "Antes de apagar fotos para liberar espaço, faça uma cópia de segurança do que deseja guardar."
+            ]
+          }
+        ]
+      },
+      govbr: {
+        title: "🏛️ Serviços Públicos e Gov.br",
+        document: "Utilizacao_gov/Relatorio_Tutorial_GovBR.pdf",
+        documentTitle: "Relatório do Tutorial Gov.br",
+        youtubeVideos: [
+          { id: "jJ9Jvm_2yoY", title: "Tutorial de Utilização do Site/App Gov", credit: "Feito por Janaise Santos" },
+          { id: "c2p-KuixXuo", title: "Como Criar sua Conta GOV.br: Passo a Passo Completo em 2026! - Acordo Certo" },
+          { id: "2HgWKoPL1Zo", title: "Como recuperar conta GOV.BR (ATUALIZADO - 2026)" },
+          { id: "OXjSv_NlqQw", title: "Como AUMENTAR o NÍVEL da CONTA GOV.BR para PRATA ou OURO | Passo a Passo 2026" },
+          { id: "jz3Tc_PXToI", title: "Assinatura Digital no GOV.BR: Tutorial Completo e Atualizado" },
+          { id: "7SD_C1tEOtQ", title: "MEU INSS 2026: Guia Completo para Entrar, Consultar Benefício e Descontos" },
+          { id: "71omcl_aV7s", title: "PASSO A PASSO acesso ao APP e Site MEU INSS: como se CADASTRAR, SERVIÇOS, CONSULTAS e ATUALIZAÇÃO" },
+          { id: "-FC29Fh8eEw", title: "Como Fazer a Carteira de Trabalho Digital 2026 Pelo Celular | Passo a Passo Completo" },
+          { id: "em5vGYeZ-z0", title: "Como Enviar Carteira de Trabalho Digital (Atualizado 2026)" },
+          { id: "kFfr2FDKPoo", title: "SEGURO DESEMPREGO 2026: primeira solicitação passo a passo — veja se você TEM DIREITO" },
+          { id: "lI41AKURo1k", title: "SEGURO-DESEMPREGO 2026 ATUALIZADO: Valores, Regras e Número de Parcelas" },
+          { id: "erxT0Qidwfw", title: "TRANSFERÊNCIA DE PROPRIEDADE DE VEÍCULO na CNH DIGITAL - PASSO A PASSO: ETAPAS, REQUISITOS, TAXAS" }
+        ],
+        textSections: [
+          {
+            title: "Use os serviços públicos com segurança",
+            tips: [
+              "Acesse o Gov.br pelo aplicativo oficial ou digitando o endereço gov.br no navegador.",
+              "Não informe sua senha ou códigos de acesso por telefone, mensagem ou links recebidos.",
+              "Mantenha seus dados de contato atualizados e ative a verificação em duas etapas na conta.",
+              "Em caso de dúvida, procure os canais oficiais do serviço antes de enviar documentos ou dados pessoais."
+            ]
+          }
+        ]
+      },
+      pagamentos: {
+        title: "💳 Compras e Pagamentos Online",
+        document: "Compras_online/Compras_online.pdf",
+        documentTitle: "Guia de Compras Online",
+        youtubeVideos: [
+          { id: "TTFEAtiH4HQ", title: "Tutorial para Compras online com segurança", credit: "Feito por David Andrade" },
+          { id: "Bf-DNUSv2NM", title: "TecMundo Explica: como fazer compras online com segurança" },
+          { id: "lkoJ4Qa3W5c", title: "[PASSO A PASSO] COMO COMPRAR NO MERCADO LIVRE COM SEGURANÇA" },
+          { id: "27tIBXoxYhc", title: "PIX NO CELULAR - CUIDADO! NÃO FAÇA PIX ANTES DE DESABILITAR ISSO NO SEU CELULAR!" }
+        ],
+        textSections: [
+          {
+            title: "Compre e pague com segurança",
+            tips: [
+              "Pesquise a reputação da loja, confira os dados de contato e leia as regras de troca antes de comprar.",
+              "Antes de confirmar um Pix, confira o nome e os dados de quem vai receber o dinheiro.",
+              "Prefira cartão virtual em compras online e nunca envie senha ou código de segurança ao vendedor.",
+              "Desconfie de descontos exagerados ou de mensagens que pressionam você a pagar imediatamente."
+            ]
+          }
+        ]
+      },
+      redes: {
+        title: "💬 WhatsApp e Redes Sociais",
+        document: "Redes_sociais/guia_de_comunicação_e_redes_sociais.pdf",
+        documentTitle: "Guia de Comunicação e Redes Sociais",
+        youtubeVideos: [
+          { id: "1bLpsceJMbM", title: "Tutorial Redes sociais", credit: "Feito por Sabrina Felix" },
+          { id: "PQULFL8biAs", title: "Instagram para Iniciantes: Como Usar Passo a Passo Completo (Tutorial 2023)" },
+          { id: "1FEcLMotRDI", title: "INSTAGRAM do ZERO para INICIANTES - Passo a passo" },
+          { id: "OxyQMTiwE1E", title: "O QUE É E COMO FUNCIONA O FACEBOOK" },
+          { id: "ioAt1xRrXCk", title: "VISÃO GERAL SOBRE O FACEBOOK" },
+          { id: "PIBG84SsG9Q", title: "Como USAR o WhatsApp de forma mais EFICIENTE" }
+        ],
+        textSections: [
+          {
+            title: "WhatsApp",
+            tips: [
+              "Você pode fixar conversas importantes no topo para encontrar mais rápido.",
+              "Dá para apagar mensagens que você enviou caso mande algo errado."
+            ]
+          },
+          {
+            title: "Instagram",
+            tips: [
+              "Você pode salvar uma publicação para ver depois.",
+              "Nos Stories dá para colocar música, texto, localização, GIFs e vários stickers."
+            ]
+          },
+          {
+            title: "Facebook",
+            tips: [
+              "Você pode salvar publicações para encontrar depois.",
+              "Dá para escolher quem pode ver cada publicação antes de postar."
+            ]
+          }
+        ]
+      }
+    };
+
+    function openTopic(key) {
+      const data = topicsData[key];
+      if (!data) return;
+
+      const youtubeVideos = data.youtubeVideos || (data.youtubeVideoIds || (data.youtubeVideoId ? [data.youtubeVideoId] : []))
+        .map((videoId, index) => ({ id: videoId, title: `Vídeo ${index + 1}` }));
+      const modalBody = document.getElementById("modalBody");
+      
+      modalBody.innerHTML = `
+        <h2 style="font-size: 1.5rem; color: var(--text-main); margin-bottom: 1rem;">${data.title}</h2>
+        
+        ${data.recordedVideo ? `
+        <h3 class="video-section-title">🎥 Vídeo Explicativo${data.videoCredit ? ` (${data.videoCredit})` : ""}</h3>
+        <div class="video-wrapper">
+          <video controls>
+            <source src="${data.recordedVideo}" type="video/mp4">
+            Seu navegador não suporta a exibição de vídeos.
+          </video>
+        </div>
+        ` : ""}
+
+        <h3 class="video-section-title">▶️ Tutoriais Complementares (YouTube)</h3>
+        ${youtubeVideos.length ? youtubeVideos.map((video, index) => `
+        <h4 class="youtube-video-title">${video.title}</h4>
+        ${video.credit ? `<p class="youtube-video-credit">${video.credit}</p>` : ""}
+        <div class="video-wrapper">
+          <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" loading="lazy" referrerpolicy="origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        `).join("") : `<p>O link do tutorial no YouTube será adicionado em breve.</p>`}
+
+        ${data.document ? `
+        <h3 class="video-section-title">📄 ${data.documentTitle || "Documento de apoio"}</h3>
+        <div class="document-wrapper">
+          <iframe src="${data.document}" title="${data.documentTitle || "Documento de apoio"}"></iframe>
+        </div>
+        <a class="document-link" href="${data.document}" target="_blank" rel="noopener noreferrer">Abrir ou baixar o documento em PDF</a>
+        ` : ""}
+
+        <h3 class="video-section-title">📝 Dica Rápida em Texto</h3>
+        ${data.textSections ? data.textSections.map(section => `
+        <section class="text-tips text-tip-group">
+          <h4>${section.title}</h4>
+          <ul>${section.tips.map(tip => `<li>${tip}</li>`).join("")}</ul>
+        </section>
+        `).join("") : `
+        <p class="text-tips">${data.textTutorial}</p>
+        `}
+      `;
+
+      document.getElementById("modalOverlay").classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeTopic() {
+      document.getElementById("modalOverlay").classList.remove("active");
+      document.body.style.overflow = "auto";
+      document.getElementById("modalBody").innerHTML = "";
+    }
+  </script>
+</body>
+</html>
