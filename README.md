@@ -49,7 +49,8 @@ Conecta_comunidade/
 🚀 Link do Site Hospedado
 O portal está acessível gratuitamente através do GitHub Pages:
 
-🔗 Acessar Conecta Comunidade
+🔗 Acessar Conecta Comunidade :
+https://vitorrodrig15.github.io/Conecta_Comunidade/
 
 👨‍🎓 Equipe & Instituição
 Instituição: Centro Universitário UniBTA
